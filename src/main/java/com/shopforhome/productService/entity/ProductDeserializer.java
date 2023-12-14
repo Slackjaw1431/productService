@@ -21,7 +21,7 @@ public class ProductDeserializer extends StdDeserializer<Product> {
 	@Override
 	public Product deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException {
 		JsonNode node = jp.getCodec().readTree(jp);
-		
+
 		Product product = new Product();
 		String name = node.get("name").asText();
 		String sku = node.get("sku").asText();
@@ -32,21 +32,25 @@ public class ProductDeserializer extends StdDeserializer<Product> {
 		BigDecimal price = node.get("unitPrice").decimalValue();
 		int totalSold = node.get("totalSold").asInt();
 		int unitsInStock = node.get("unitsInStock").asInt();
-	    product.setName(name);
-	    product.setSku(sku);
-	    product.setDescription(description);
-	    product.setBrand(brand);
-	    product.setImageUrl(imageUrl);
-	    product.setDiscount(discount);
-	    product.setUnitPrice(price);
-	    product.setTotalSold(totalSold);
-	    product.setUnitsInStock(unitsInStock);
+		product.setName(name);
+		product.setSku(sku);
+		product.setDescription(description);
+		product.setBrand(brand);
+		product.setImageUrl(imageUrl);
+		product.setDiscount(discount);
+		product.setUnitPrice(price);
+		product.setTotalSold(totalSold);
+		product.setUnitsInStock(unitsInStock);
 
-        Long categoryId = node.get("category").asLong(); // Assuming category_id is represented in JSON
-        ProductCategory category = new ProductCategory();
-        category.setId(categoryId);
-        product.setCategory(category);
-        
+		try {
+			Long categoryId = node.get("category").asLong(); // Assuming category_id is represented in JSON
+			ProductCategory category = new ProductCategory();
+			category.setId(categoryId);
+			product.setCategory(category);
+		} catch (Exception e) {
+			System.out.println("No category ID found");
+		}
+
 		return product;
 	}
 }
